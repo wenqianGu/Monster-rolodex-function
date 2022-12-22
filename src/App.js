@@ -7,6 +7,9 @@ function App() {
 
     const [searchField, setSearchField] = useState(''); // [value, setValue]
     const [monsters, setMonsters] = useState([]);
+    const [filteredMonsters, setFilteredMonsters] = useState(monsters);
+    // filterMonsters depends on monsters, searchField changes.
+    // 如果不设置filteredMonsters的state，页面上其他任何state改变（只要functional component render），都会重新 re-built filterMonsters
 
     console.log('render')
 
@@ -16,14 +19,23 @@ function App() {
             .then((users) => setMonsters(users))
     }, []);
 
+    useEffect(() => {
+        const newFilteredMonsters = monsters.filter((monster) => {
+            return monster.name.toLocaleLowerCase().includes(searchField);
+        });
+        setFilteredMonsters(newFilteredMonsters);
+        console.log('filterMonsters-useEffect')
+    }, [ monsters,searchField])
+
     const onSearchChange = (event) => {
         const searchFieldString = event.target.value.toLocaleLowerCase();
         setSearchField(searchFieldString)
     };
-
-    const filteredMonsters = monsters.filter((monster) => {
-        return monster.name.toLocaleLowerCase().includes(searchField);
-    });
+            // every time this function runs, this filtered monsters array is getting rebuilt,
+            // even if the monster's array has not changed.
+    // const filteredMonsters = monsters.filter((monster) => {
+    //     return monster.name.toLocaleLowerCase().includes(searchField);
+    // });
 
     return (
         <div className="App">
