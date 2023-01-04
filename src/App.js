@@ -6,6 +6,7 @@ import CardList from "./components/card-list/card-list.component";
 function App() {
 
     const [searchField, setSearchField] = useState(''); // [value, setValue]
+    const [title, setTitle] = useState('');
     const [monsters, setMonsters] = useState([]);
     const [filteredMonsters, setFilteredMonsters] = useState(monsters);
     // filterMonsters depends on monsters, searchField changes.
@@ -31,6 +32,11 @@ function App() {
         const searchFieldString = event.target.value.toLocaleLowerCase();
         setSearchField(searchFieldString)
     };
+
+    const onTitleChange = (event) => {
+        const searchFieldString = event.target.value.toLocaleLowerCase();
+        setTitle(searchFieldString)
+    };
             // every time this function runs, this filtered monsters array is getting rebuilt,
             // even if the monster's array has not changed.
     // const filteredMonsters = monsters.filter((monster) => {
@@ -39,11 +45,18 @@ function App() {
 
     return (
         <div className="App">
-            <h1 className='app-title'> Monster Rolodex</h1>
+            <h1 className='app-title'> {title}</h1>
             <SearchBox
                 className='monster-search-box'
                 placeholder='search monsters'
-                onChangeHandler={onSearchChange}/>
+                onChangeHandler={onSearchChange}
+                />
+                <br></br>
+                <SearchBox
+                className='title-search-box'
+                placeholder='set title'
+                onChangeHandler={onTitleChange}
+                />
             <CardList monsters={filteredMonsters}/>
         </div>
     );
